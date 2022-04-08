@@ -73,10 +73,30 @@ on rental.inventory_id=invent.inventory_id
 group by staff_id;
 
 
+-- 8 ) que rating de película es el que tiene un mayor rental_rate de media:
 
+select rating, avg(rental_rate)
+from film
+group by rating;
+ -- las películas con rating pg son las que más se alquilan de media
  
+-- 9)¿ que peliculas tienen deleted scenes?
 
+select title,special_features
+from film
+where special_features like ("Deleted Scenes%");
 
+-- 10) De la lista de películas anteriores cuales protagonizó PENELOPE GUINESS (usando tablas temporales)
+ 
+create temporary table deleted_scenes
+select film.title, `full name`, special_features  
+from film
+left join old_hdd as old
+on old.title=film.title;
+
+select *
+from deleted_scenes
+where special_features like ("Deleted Scenes%") and `full name`="PENELOPE GUINESS";
 
 
 
