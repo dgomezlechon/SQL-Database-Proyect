@@ -46,7 +46,7 @@ USE `new_database2` ;
 -- -----------------------------------------------------
 -- Table `new_database`.`actor`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `new_database2`.`actor` (
+CREATE TABLE IF NOT EXISTS `new_database`.`actor` (
   `actor_id` INT NOT NULL,
   `first_name` TEXT NULL DEFAULT NULL,
   `last_name` TEXT NULL DEFAULT NULL,
@@ -173,11 +173,11 @@ USE `new_database2` ;
 -- Table `new_database2`.`actor`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `new_database2`.`actor` (
-  `actor_id` INT NOT NULL,
+  `actor_id` INT NULL,
   `first_name` TEXT NULL DEFAULT NULL,
   `last_name` TEXT NULL DEFAULT NULL,
-  `full name` TEXT NULL DEFAULT NULL,
-  PRIMARY KEY (`actor_id`))
+  `full name` TEXT NOT NULL,
+  PRIMARY KEY (`full name`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
@@ -211,8 +211,8 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- Table `new_database2`.`film`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `new_database2`.`film` (
-  `film_id` INT NOT NULL,
-  `title` TEXT NULL DEFAULT NULL,
+  `film_id` INT NULL,
+  `title` TEXT NOT NULL,
   `description` TEXT NULL DEFAULT NULL,
   `release_year` INT NULL DEFAULT NULL,
   `language_id` INT NULL DEFAULT NULL,
@@ -223,7 +223,7 @@ CREATE TABLE IF NOT EXISTS `new_database2`.`film` (
   `rating` TEXT NULL DEFAULT NULL,
   `special_features` TEXT NULL DEFAULT NULL,
   `language_language_id` INT NOT NULL,
-  PRIMARY KEY (`film_id`, `language_language_id`),
+  PRIMARY KEY (`language_language_id`, `title`),
   INDEX `fk_film_language1_idx` (`language_language_id` ASC) VISIBLE,
   CONSTRAINT `fk_film_language1`
     FOREIGN KEY (`language_language_id`)
@@ -264,26 +264,27 @@ CREATE TABLE IF NOT EXISTS `new_database2`.`old_hdd` (
   `release_year` INT NULL DEFAULT NULL,
   `category_id` INT NULL DEFAULT NULL,
   `full name` TEXT NULL DEFAULT NULL,
-  `actor_actor_id` INT NOT NULL,
-  `film_film_id` INT NOT NULL,
-  `film_language_language_id` INT NOT NULL,
   `category_category_id` INT NOT NULL,
-  PRIMARY KEY (`actor_actor_id`, `film_film_id`, `film_language_language_id`, `category_category_id`),
-  INDEX `fk_old_hdd_film1_idx` (`film_film_id` ASC, `film_language_language_id` ASC) VISIBLE,
+  `actor_full name` TEXT NOT NULL,
+  `film_language_language_id` INT NOT NULL,
+  `film_title` TEXT NOT NULL,
+  PRIMARY KEY (`category_category_id`, `actor_full name`, `film_language_language_id`, `film_title`),
   INDEX `fk_old_hdd_category1_idx` (`category_category_id` ASC) VISIBLE,
-  CONSTRAINT `fk_old_hdd_actor1`
-    FOREIGN KEY (`actor_actor_id`)
-    REFERENCES `new_database2`.`actor` (`actor_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_old_hdd_film1`
-    FOREIGN KEY (`film_film_id` , `film_language_language_id`)
-    REFERENCES `new_database2`.`film` (`film_id` , `language_language_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+  INDEX `fk_old_hdd_actor1_idx` (`actor_full name` ASC) VISIBLE,
+  INDEX `fk_old_hdd_film1_idx` (`film_language_language_id` ASC, `film_title` ASC) VISIBLE,
   CONSTRAINT `fk_old_hdd_category1`
     FOREIGN KEY (`category_category_id`)
     REFERENCES `new_database2`.`category` (`category_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_old_hdd_actor1`
+    FOREIGN KEY (`actor_full name`)
+    REFERENCES `new_database2`.`actor` (`full name`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_old_hdd_film1`
+    FOREIGN KEY (`film_language_language_id` , `film_title`)
+    REFERENCES `new_database2`.`film` (`language_language_id` , `title`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -547,4 +548,3 @@ DEFAULT CHARACTER SET = utf8mb3;
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
-
