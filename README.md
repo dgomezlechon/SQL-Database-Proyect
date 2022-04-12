@@ -1,5 +1,15 @@
 # W4 Project - Building mySQL Data-base 
 
+## Objetivos
+Crear una base de datos a partir de distintas tablas para reflejar el funcionamiento de un videoclub
+
+## Entregables
+- Exploracion y limpieza con-bonus.ipynb
+- queries.sql
+- schemas
+
+
+
 ## Exploración de los datos
 
 Exploramos las distintas tablas, viendo tanto las columnas que hay para entender el ocntenido y establecer las distintas relaciones entre tablas como el tipo de datos como si hay nulos o no.
